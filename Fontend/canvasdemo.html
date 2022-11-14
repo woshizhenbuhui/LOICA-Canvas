@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html style="width: 100%; height: 650px;">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title></title>
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<style type="text/css">
+			#tool {
+				float: left;
+				width: 20%;
+				height: 100%;
+				background-color: #cfcfcf;
+				border: black 1px solid;
+
+			}
+
+			#canvas {
+				float: left;
+				width: 700px;
+				height: 650px;
+				/* background-color: #cfcfcf; */
+				border: black 1px solid;
+				background: linear-gradient(90deg, rgba(100, 100, 100, 0.1) 5%, transparent 0),
+					linear-gradient(rgba(100, 100, 100, 0.1) 5%, transparent 0);
+				/*Horizontal and vertical width distance*/
+				background-size: 20px 20px;
+			}
+
+			#property {
+				float: left;
+				width: 24%;
+				height: 100%;
+				background-color: #cfcfcf;
+				border: black 1px solid;
+				text-align: center;
+				line-height: 100px
+			}
+
+			#rect {
+				float: left;
+				margin: 5%;
+				width: 100px;
+				height: 100px;
+				border: black 1px solid;
+				text-align: center;
+				line-height: 100px
+			}
+
+			#arrow {
+				float: left;
+				margin: 5%;
+				width: 100px;
+				height: 100px;
+				border: black 1px solid;
+				text-align: center;
+				line-height: 100px
+			}
+
+			#cancel {
+				float: left;
+				margin: 5%;
+				width: 100px;
+				height: 100px;
+				border: dashed 1px;
+				text-align: center;
+				line-height: 100px
+			}
+
+			#circle {
+				float: left;
+				margin: 5%;
+				width: 100px;
+				height: 100px;
+				border: black 1px solid;
+				-moz-border-radius: 50px;
+				-webkit-border-radius: 50px;
+				border-radius: 50px;
+				text-align: center;
+				line-height: 100px;
+
+
+			}
+
+			#info {
+				float: left;
+				margin-top: 1%;
+				margin-left: 20%;
+				text-align: center;
+				width: 200px;
+				height: 20px;
+				-moz-border-radius: 50px;
+				-webkit-border-radius: 50px;
+				border-radius: 50px;
+				font-size: 20px;
+			}
+
+			#rectProp {
+				line-height: 40px;
+				text-align: center;
+				margin: 5%;
+			}
+
+
+			#resultImg {
+				margin: 20%;
+			}
+
+			#hillProp {
+				line-height: 40px;
+				text-align: center;
+				margin: 5%;
+			}
+
+			#hill2 {
+				float: left;
+				margin: 5%;
+				width: 0px;
+				height: 0px;
+				text-align: center;
+				border-width: 0 50px 87px;
+				border-style: solid;
+				border-color: transparent transparent #095;
+				background-color: #cfcfcf;
+			}
+
+			#hill1 {
+				float: left;
+				margin: 5%;
+				width: 0px;
+				height: 0px;
+				text-align: center;
+				border-left: 50px solid transparent;
+				border-right: 50px solid transparent;
+				border-top: 87px solid #dec519;
+				background-color: #cfcfcf;
+			}
+
+			input {
+				height: 30px;
+			}
+
+			button {
+				height: 30px;
+				text-align: center;
+				line-height: 20px;
+			}
+
+			.slink {
+				width: 49%;
+				float: left;
+				text-align: center;
+				line-height: 40px;
+				border-width: 1px;
+				border-style: solid;
+				border-color: #000000;
+				font-size: 15px;
+			}
+		</style>
+	</head>
+
+	<body style="width: 100%; height: 650px;">
+
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							Assay
+						</h4>
+					</div>
+					<div class="modal-body" style="text-align: center;">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name: <input id="globalName" />
+						<br />
+						<br />
+						&nbsp;&nbsp;&nbsp;&nbsp;Description:  <input id="globalDesc" />
+						<br />
+						<br />
+						measurements:<input id="globalNum" />
+						<br />
+						<br />
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interval: <input id="globalGap" />
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close
+						</button>
+						<button type="button" class="btn btn-primary" onclick="submitProp()">
+							Submit
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+
+		<div>
+			<div class="slink">
+				<a href="canvasdemo.html">Drag & Drop</a>
+			</div>
+
+			<div class="slink">
+				<a href="http://127.0.0.1:8000/tool" target="_blank">Textual</a>
+			</div>
+		</div>
+		<br />
+		<br />
+		<div id="tool">
+			<div id="rect" onclick="selectRect()">
+				Reporter
+			</div>
+			<div id="circle" onclick="selectCircle()">
+				Regulator
+			</div>
+			<div id="hill2" onclick="selectOpt2()">
+
+			</div>
+			<div id="hill1" onclick="selectOpt1()">
+
+			</div>
+			<div id="arrow" onclick="selectArrow()">
+				<div>
+					Arrows
+				</div>
+			</div>
+			<div id="cancel" onclick="emptyCurrent()">
+				<div>
+					Cancel
+				</div>
+			</div>
+			<div id="cancel" onclick="deleteShow()">
+				<div>
+					Delete
+				</div>
+			</div>
+			<div id="cancel" onclick="undo()">
+				<div>
+					Undo
+				</div>
+			</div>
+
+			<div id="info">
+				<div style="color: red;" id="innerinfo">
+					You have not selected any tools
+				</div>
+			</div>
+		</div>
+		<div id="canvas">
+			<canvas id="mycanvas" width="700" height="650">
+
+			</canvas>
+		</div>
+		<div id="property">
+
+			<div id="rectProp" hidden="hidden">
+				<font color="red"> Please ensure that each attribute is completed before submitting</font>
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name: <input id="rectName" type="text" />
+				<br />
+				&nbsp;&nbsp;Degradation rate:<input id="degRate" type="text" />
+				<br />
+				Initial concentration:  <input id="initialCon" type="text" />
+				<br />
+				<button onclick="saveProp()">Save</button>
+				<br />
+				<button data-toggle="modal" data-target="#myModal">Assay</button>
+			</div>
+
+			<div id="hillProp" hidden="hidden">
+				<font color="red"> Please ensure that each attribute is completed before submitting</font>
+				<br />
+				Name: <input id="hillName" type="text" />
+				<br />
+				Input: <input id="hillInput" type="text" readonly="readonly" />
+				<br />
+				Output: <input id="hillOutput" type="text" readonly="readonly" />
+				<br />
+				Alpha: <input id="hillAlpha" type="text" />
+				<br />
+				<button onclick="saveProp()">Save</button>
+				<br />
+				<button data-toggle="modal" data-target="#myModal">Assay</button>
+			</div>
+
+			<div id="resultImg">
+				<div id="alterna">
+					<!-- <img width="200px" height="130px" onclick="window.open('http://localhost:8000/media/line.png')" src="http://localhost:8000/media/line.png"/>
+					<img width="200px" height="130px" onclick="window.open('http://localhost:8000/media/hot.png')" src="http://localhost:8000/media/hot.png"/> -->
+				</div>
+			</div>
+		</div>
+	</body>
+
+	<script type="text/javascript" src="./arrow.js"></script>
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	<script>
+		class Stack {
+			constructor() {
+				this.item = [];
+			}
+			push(element) { //Adding a stack element
+				this.item.push(element);
+			}
+			pop() {//Delete the top element of the stack
+				return this.item.pop();
+			}
+			peek() { //Returns the top element of the stack
+				return this.item[this.item.length - 1];
+			}
+			clear() {//Clear all elements from the stack
+				this.item = [];
+			}
+			isEmpty() { //Determine if the stack is empty
+				return this.item.length === 0;
+			}
+			size() { //Return stack length
+				return this.item.length;
+			}
+			toString() { //Converted to a string
+				return this.item.toString();
+			}
+		}
+
+		var operators = new Stack();
+
+
+		var current = 0;
+
+		var fromShape = null;
+		var toShape = null;
+
+		function emptyCurrent() {
+			current = 0;
+			fromShape = null;
+			toShape = null;
+			$("#innerinfo").html("You have not selected any tools")
+		}
+
+		function selectRect() {
+			current = 1;
+			$("#innerinfo").html("You have selected the Reporter tool")
+		}
+
+		function selectCircle() {
+			current = 2;
+			$("#innerinfo").html("You have selected the Regulator tool")
+		}
+
+		function selectArrow() {
+			current = 3
+			$("#innerinfo").html("You have selected the arrow tool")
+		}
+
+		function deleteShow() {
+			current = 4;
+			$("#innerinfo").html("You have selected the Delete tool")
+		}
+
+		function selectOpt2() {
+			current = 5
+			$("#innerinfo").html("You have selected the Hill2 tool")
+		}
+
+		function selectOpt1() {
+			current = 6
+			$("#innerinfo").html("You have selected the Hill1 tool")
+		}
+
+		var shape = null;
+		var arr = [];
+		operators.push(arr);
+
+		function undo() {
+			arr = operators.pop()
+
+			if (arr === undefined) {
+				arr = []
+			}
+
+			showGraph(arr, ctx)
+		}
+
+		function saveProp() {
+
+			if (shape == null) {
+				return;
+			}
+			if (shape.type === 'hill2' || shape.type === 'hill1') {
+				shape.input = $("#hillInput").val();
+				shape.output = $("#hillOutput").val();
+				shape.name = $("#hillName").val();
+				shape.alpha = $("#hillAlpha").val();
+			} else if (shape.type == 'rect' || shape.type == 'circle') {
+				shape.moer = $("#initialCon").val();
+				shape.ratio = $("#degRate").val();
+				shape.name = $("#rectName").val();
+			}
+
+			const clone = arr.concat([]);
+			operators.push(clone)
+			showGraph(arr, ctx)
+		}
+
+
+		function showProp(shape) {
+
+			console.log(shape)
+			if (shape.type === 'rect' || shape.type === 'circle') {
+				$("#hillProp").hide();
+				$("#rectProp").show();
+
+				$("#initialCon").val(shape.moer);
+				$("#degRate").val(shape.ratio);
+				$("#rectName").val(shape.name);
+			} else if (shape.type === 'arrow') {
+				$("#hillProp").hide();
+				$("#rectProp").hide();
+			} else {
+				$("#hillProp").show();
+				$("#rectProp").hide();
+
+				$("#hillInput").val(shape.input);
+				$("#hillOutput").val(shape.output);
+				$("#hillName").val(shape.name);
+				$("#hillAlpha").val(shape.alpha);
+			}
+		}
+
+
+		function addArrow(shape) {
+
+			if (shape.type === 'arrow') {
+				return;
+			} else if (!shape.name) {
+				return;
+			}
+
+			if (fromShape == null) {
+				fromShape = shape;
+			} else {
+				toShape = shape;
+			}
+
+			if (fromShape == null || toShape == null) {
+				return;
+			}
+
+			// input
+			if ((fromShape.type === 'rect' || fromShape.type === 'circle') && (toShape.type === 'hill1' || toShape.type ===
+					'hill2')) {
+				console.log("input")
+				var shape = new Shape(fromShape.x, fromShape.y, toShape.x, toShape.y, "arrow")
+				shape.from = fromShape.name
+				shape.to = toShape.name
+				shape.fromtype = fromShape.type
+				shape.totype = toShape.type
+
+				const clone = arr.concat([]);
+				operators.push(clone)
+				arr.push(shape)
+				if (toShape.input) {
+					if (toShape.input.indexOf(fromShape.name) == -1) {
+						toShape.input = toShape.input + "," + fromShape.name;
+					}
+
+				} else {
+					toShape.input = fromShape.name;
+				}
+				$("#hillInput").val(toShape.input);
+				fromShape = null;
+				toShape = null;
+				showGraph(arr, ctx);
+			} else if ((toShape.type === 'rect' || toShape.type === 'circle') && (fromShape.type === 'hill1' || fromShape
+					.type === 'hill2')) {
+				// out put
+				console.log("output")
+				var shape = new Shape(fromShape.x, fromShape.y, toShape.x, toShape.y, "arrow")
+				shape.from = fromShape.name
+				shape.to = toShape.name
+				shape.fromtype = fromShape.type
+				shape.totype = toShape.type
+
+				const clone = arr.concat([]);
+				operators.push(clone)
+				arr.push(shape)
+				if (fromShape.output) {
+					if (fromShape.output.indexOf(toShape.name) == -1) {
+						fromShape.output = fromShape.output + "," + toShape.name;
+					}
+
+				} else {
+					fromShape.output = toShape.name;
+				}
+				$("#hillOutput").val(fromShape.output);
+				fromShape = null;
+				toShape = null;
+				showGraph(arr, ctx);
+			} else {
+				fromShape = toShape;
+				toShape = null;
+			}
+		}
+
+
+
+
+
+		class Shape {
+			constructor(x, y, x1, y1, type) {
+				this.x = x;
+				this.y = y;
+				this.x1 = x1;
+				this.y1 = y1;
+				this.type = type
+			}
+		}
+
+
+		var move = false;
+
+		var c = document.getElementById("mycanvas");
+		var ctx = c.getContext("2d");
+
+		function submitProp() {
+			var globalname = $("#globalName").val();
+			var globaldesc = $("#globalDesc").val();
+			var globalnum = $("#globalNum").val();
+			var globalgap = $("#globalGap").val();
+			if (!globalname || !globaldesc || !globalnum || !globalgap) {
+				alert("Please fill in the Assay attributes")
+				return;
+			}
+
+			if (arr.length <= 0) {
+				alert("Please draw the required components and ensure that the attributes are filled in correctly before submitting")
+			} else {
+				const jsondata = JSON.stringify({
+					'globalname': globalname,
+					'globaldesc': globaldesc,
+					'globalnum': globalnum,
+					'globalgap': globalgap,
+					'jsonarr': arr
+				})
+				console.log(jsondata)
+				$.ajax({
+					type: "POST",
+					url: "http://localhost:8000/index/",
+					data: jsondata,
+					dataType: "json",
+					contentType: "application/json",
+					complete: function(resp) {
+						$("#alterna").remove()
+						const urls = resp.responseJSON.data;
+						console.log(urls)
+						let htmltxt = '<div id="alterna">';
+						for (var i = 0; i < urls.length; i++) {
+							htmltxt = htmltxt +
+								'<img width="200px" height="130px" onclick="openImg(' + i + ')"  src="' + urls[
+									i] + '?random=' + Math.random() + '"/>';
+
+
+						}
+
+						htmltxt = htmltxt + "<a href='http://127.0.0.1:8000/showdata/' target='_blank'> Measurements</a>";
+						htmltxt = htmltxt + '</div>'
+						$("#resultImg").html(htmltxt)
+					}
+				})
+			}
+		}
+
+		function openImg(index) {
+			if (index === 0) {
+				window.open('http://localhost:8000/media/line.png')
+			} else {
+				window.open('http://localhost:8000/media/hot.png')
+			}
+		}
+
+
+		var startX = -1;
+		var startY = -1;
+
+		c.addEventListener('mouseup', e => {
+			if (move && current == 3) {
+
+				const clone = arr.concat([]);
+				operators.push(clone)
+				arr.push(new Shape(startX, startY, e.offsetX, e.offsetY, "arrow"))
+				showGraph(arr, ctx);
+			}
+			move = false;
+		})
+
+		c.addEventListener('mousedown', e => {
+			if (current == 3) {
+				move = true;
+				startX = e.offsetX;
+				startY = e.offsetY;
+			} else {
+				shape = containsThing(e.offsetX, e.offsetY);
+				if (shape != null) {
+					if (current == 4) {
+						deleteShape(shape);
+					} else {
+						arr.forEach((item, index, arr) => {
+							item.select  = false;
+						});
+						shape.select = true;
+						showProp(shape);
+						if (event.shiftKey) {
+							addArrow(shape);
+						} else {
+							move = true;
+						}
+						showGraph(arr, ctx);
+
+					}
+
+				} else {
+					if (current == 1) {
+						const clone = arr.concat([]);
+						operators.push(clone)
+						arr.push(new Shape(e.offsetX, e.offsetY, 0, 0, "rect"))
+						showGraph(arr, ctx);
+					} else if (current == 2) {
+						const clone = arr.concat([]);
+						operators.push(clone);
+						arr.push(new Shape(e.offsetX, e.offsetY, 0, 0, "circle"))
+						showGraph(arr, ctx);
+					} else if (current == 5) {
+						const clone = arr.concat([]);
+						operators.push(clone)
+						arr.push(new Shape(e.offsetX, e.offsetY, 0, 0, "hill2"))
+						showGraph(arr, ctx);
+					} else if (current == 6) {
+						const clone = arr.concat([]);
+						operators.push(clone)
+						arr.push(new Shape(e.offsetX, e.offsetY, 0, 0, "hill1"))
+						showGraph(arr, ctx);
+					}
+				}
+			}
+
+		})
+
+		c.addEventListener('mousemove', e => {
+			if (move) {
+				if (current == 3) {
+					return;
+				}
+				if (shape.type === 'arrow') {
+					const x = Math.min(shape.x, shape.x1);
+					const y = Math.min(shape.y, shape.y1)
+					const w = Math.abs(shape.x - shape.x1);
+					const h = Math.abs(shape.y - shape.y1);
+					console.log(x, y, w, h)
+					//ctx.clearRect(x - 1, y - 1, w + 3, h + 3)
+					if (shape.x < shape.x1) {
+						shape.x = e.offsetX - w / 2;
+						shape.x1 = e.offsetX + w / 2;
+					} else {
+						shape.x1 = e.offsetX - w / 2;
+						shape.x = e.offsetX + w / 2;
+					}
+
+					if (shape.y < shape.y1) {
+						shape.y = e.offsetY - h / 2;
+						shape.y1 = e.offsetY + h / 2;
+					} else {
+						shape.y = e.offsetY + h / 2;
+						shape.y1 = e.offsetY - h / 2;
+					}
+
+					showGraph(arr, ctx);
+				} else {
+					shape.x = e.offsetX;
+					shape.y = e.offsetY;
+					showGraph(arr, ctx);
+				}
+				ctx.stroke();
+			}
+
+		})
+
+
+
+		function deleteShape(shape) {
+			const clone = arr.concat([]);
+			operators.push(clone)
+			arr.forEach((item, index, arr) => {
+				if (item === shape) {
+					console.log(item)
+					arr.splice(index, 1);
+				}
+			});
+
+			// arrow
+			if (shape.type === 'arrow') {
+				let from = null;
+				let to = null;
+				arr.forEach((item, index, arr) => {
+					if (item.name === shape.from) {
+						from = item
+					}
+
+					if (item.name === shape.to) {
+						to = item
+					}
+				});
+				if (shape.fromtype === 'hill2' || shape.fromtype === 'hill1') {
+					let replaced = shape.to + ",";
+					let replaced1 = "," + shape.to;
+					if (from != null) {
+						from.output = from.output.replace(replaced, "").replace(replaced1, "").replace(shape.to, "")
+					}
+
+				}
+				if (shape.totype === 'hill2' || shape.totype === 'hill1') {
+					let replaced = shape.from + ",";
+					let replaced1 = "," + shape.from;
+					if (to != null) {
+						to.input = to.input.replace(replaced, "").replace(replaced1, "").replace(shape.from, "")
+					}
+
+				}
+			} else if (shape.type === 'hill2' || shape.type === 'hill1') {
+				// operator do nothing
+			} else {
+				// delete input and output
+				arr.forEach((item, index, arr) => {
+					if (item.type === 'hill2' || item.type === 'hill1') {
+						let replaced = shape.name + ",";
+						let replaced1 = "," + shape.name;
+						item.output = item.output.replace(replaced, "").replace(replaced1, "").replace(shape.name, "")
+						item.input = item.input.replace(replaced, "").replace(replaced1, "").replace(shape.name, "")
+					}
+				});
+
+			}
+			shape = null;
+			showGraph(arr, ctx);
+		}
+
+		function containsThing(x, y) {
+
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i].type === 'rect') {
+
+					if (inRect(arr[i], x, y)) {
+						return arr[i];
+					}
+				}
+
+				if (arr[i].type === 'circle') {
+					if (inCircle(arr[i], x, y)) {
+						return arr[i];
+					}
+				}
+
+				if (arr[i].type === 'hill2' || arr[i].type === 'hill1') {
+					if (inCircle(arr[i], x, y)) {
+						return arr[i];
+					}
+				}
+
+				if (arr[i].type === 'arrow') {
+					if (inArrow(arr[i], x, y)) {
+						return arr[i];
+					}
+				}
+			}
+			return null;
+		}
+
+		function inRect(rect, x, y) {
+			return rect.x - 50 <= x && rect.y - 50 <= y && (rect.x + 50) >= x && (rect.y + 50) >= y;
+		}
+
+		function inCircle(circle, x, y) {
+			return Math.pow((circle.x - x), 2) + Math.pow((circle.y - y), 2) <= 2500;
+		}
+
+		function inArrow(arrow, x, y) {
+			const minx = Math.min(arrow.x, arrow.x1);
+			const maxx = Math.max(arrow.x, arrow.x1);
+			const miny = Math.min(arrow.y, arrow.y1);
+			const maxy = Math.max(arrow.y, arrow.y1);
+
+			if (minx <= x && maxx >= x && miny <= y && maxy >= y) {
+				return true;
+			}
+
+			console.log(arrow.x, arrow.x1, x)
+			console.log(arrow.y, arrow.y1, y)
+			if (Math.abs(arrow.x - arrow.x1) <= 30) {
+				const res = Math.abs(arrow.x - x);
+				console.log("res1", res)
+				return res <= 30;
+			}
+			if (Math.abs(arrow.y == arrow.y1) <= 30) {
+				const res = Math.abs(arrow.y - y)
+				console.log("res2", res)
+				return res <= 30;
+			}
+
+			return false;
+		}
+
+		function showGraph(array, ctx) {
+			ctx.clearRect(0, 0, 700, 650);
+			for (var i = 0; i < array.length; i++) {
+				const shape = array[i];
+				ctx.beginPath()
+				if(shape.select === true) {
+					ctx.strokeStyle = 'rgb(255,0,0)';
+				} else {
+					ctx.strokeStyle = 'rgb(0,0,0)';
+				}
+				if (shape.type === 'rect') {
+					ctx.rect(shape.x - 50, shape.y - 50, 100, 100)
+					ctx.stroke();
+				} else if (shape.type === 'circle') {
+					ctx.arc(shape.x, shape.y, 50, 0, 2 * Math.PI)
+					ctx.stroke();
+
+				} else if (shape.type === 'hill2') {
+					ctx.moveTo(shape.x, shape.y - 58)
+					ctx.lineTo(shape.x - 50, shape.y + 29)
+					ctx.lineTo(shape.x + 50, shape.y + 29)
+					ctx.closePath();
+					ctx.stroke();
+				} else if (shape.type === 'hill1') {
+					ctx.moveTo(shape.x, shape.y + 58)
+					ctx.lineTo(shape.x + 50, shape.y - 29)
+					ctx.lineTo(shape.x - 50, shape.y - 29)
+					ctx.closePath();
+					ctx.stroke();
+				} else if (shape.type === 'arrow') {
+					var a1 = new window.mapleque.arrow();
+					a1.set({
+						x: shape.x,
+						y: shape.y
+					}, {
+						x: shape.x1,
+						y: shape.y1
+					});
+					a1.paint(ctx);
+				}
+
+				if (shape.name) {
+					const width = ctx.measureText(shape.name).width / 2
+					ctx.font="20px serif";
+					ctx.fillText(shape.name, shape.x - width, shape.y);
+				}
+			}
+		}
+	</script>
+
+</html>
